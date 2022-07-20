@@ -22,36 +22,40 @@ class Renderer():
     
 
     def run(self):
+        ang = 0.02
         while True:
             self.screen.fill((0,0,0))
             self.object.draw()
+            self.camera.control()
             [exit() for i in pygame.event.get() if i.type == pygame.QUIT]
-
-
             pygame.display.flip()
             self.clock.tick(self.FPS)
-            exit()
+            self.object.rotateY(ang)
+            pygame.display.update()
+            # exit()
+
+
+
+def get_object_from_file(renderer, filename):
+        vertex, faces = [], []
+        with open(filename) as f:
+            for line in f:
+                if line.startswith('v '):
+                    vertex.append([float(i) for i in line.split()[1:]] + [1])
+                elif line.startswith('f'):
+                    faces_ = line.split()[1:]
+                    faces.append([int(face_.split('/')[0]) - 1 for face_ in faces_])
+        return Object3D(renderer, vertex, faces)
 
 
 if __name__ == '__main__':
     r = Renderer()
 
-    cube_vertices = [
-                [0,0,0,1],
-                [0,0,1,1],
-                [1,0,0,1],
-                [1,0,1,1],
-                
-                [0,1,0,1],
-                [0,1,1,1],
-                [1,1,0,1],
-                [1,1,1,1]
-            ]
+    figure = get_object_from_file(r, "trumpet.obj")
 
-    cube_faces = [[0,1,2,3], [0,1,4,5], [0,2,4,6], [4,5,6,7], [1,3,5,7], [2,3,6,7]]
+    figure.scale(0.01)
 
-    cube = Object3D(r, cube_vertices, cube_faces)
-    r.object = cube
+    r.object = figure
     r.run()
 
     

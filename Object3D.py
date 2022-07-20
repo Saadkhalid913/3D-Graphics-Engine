@@ -13,7 +13,7 @@ class Object3D():
         self.renderer = render
         self.movement_flag = False
         self.draw_vertices = True 
-        self.translate([0.0001, 0.0001, 0.0001])
+        # self.translate([0.0001, 0.0001, 0.0001])
 
 
 
@@ -30,7 +30,6 @@ class Object3D():
         vertices = np.matmul(vertices, self.renderer.projection.screen_projection_matrix)
         vertices = vertices[: , : -2]
         
-        print(vertices)
 
 
 
@@ -40,6 +39,14 @@ class Object3D():
 
     def translate(self, pos):
         self.vertices = np.matmul(self.vertices, translate(pos))
+
+
+    def rotateY(self, angle):
+        self.vertices = np.matmul(self.vertices, rotate_y(angle))
+
+    def scale(self, s):
+        self.vertices = np.matmul(self.vertices, scale(s))
+
 
 
 
