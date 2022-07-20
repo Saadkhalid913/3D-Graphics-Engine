@@ -6,7 +6,7 @@ class Projection():
     def __init__(self, render):
         near = render.camera.near_plane
         far = render.camera.far_plane 
-        left = np.tan(render.camera.h_fov / 2)
+        left = -np.tan(render.camera.h_fov / 2)
         right = -left 
         bottom = -np.tan(render.camera.v_fov / 2)
         top = -bottom
@@ -14,7 +14,7 @@ class Projection():
         self.projection_matrix = np.array([
             [2 / (right - left), 0,0,0],
             [0, 2 / (top - bottom), 0,0],
-            [0,0,(far + near) / (far - near), 0],
+            [0,0,(far + near) / (far - near), 1],
             [0,0, -2 * near * far / (far - near), 0]
         ])
 
